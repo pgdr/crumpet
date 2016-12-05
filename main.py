@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+
+import sys, random
+from PyQt4.QtCore import QTimer
+from PyQt4.QtGui import QApplication
+from platform import Platform
+from time import sleep
+
+
+class Game(QApplication):
+    def __init__(self, args):
+        super(Game, self).__init__(args)
+        self._pl = Platform()
+
+    def tick(self):
+        self._pl.tick()
+
+    def run(self):
+        timer = QTimer(self)
+        timer.timeout.connect(self.tick)
+        timer.start(30)
+        self.exec_()
+
+if __name__ == '__main__':
+    g = Game(sys.argv)
+    g.run()
