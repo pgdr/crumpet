@@ -5,7 +5,7 @@ class Sprite(object):
         self._name = name
         self._pos  = pos
         self._velocity = Coordinate.origo()
-        self._acc = Coordinate(0,-98.1) # gravity
+        self._acc = Coordinate(0,-9.81*50) # gravity * scale
         self._drawable = ['E','N']
 
 
