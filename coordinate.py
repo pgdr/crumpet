@@ -1,3 +1,5 @@
+from math import sqrt
+
 class Coordinate(object):
     def __init__(self, x=0, y=0, copy=None):
         if copy is None:
@@ -78,3 +80,10 @@ class Coordinate(object):
     
     def __abs__(self):
         return Coordinate(abs(self.x), abs(self.y))
+
+    def distance(self, otr):
+        x1, x2 = self.x, otr.x
+        y1, y2 = self.y, otr.y
+        dx = (x1-x2)**2
+        dy = (y1-y2)**2
+        return sqrt(dx+dy)

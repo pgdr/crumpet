@@ -2,6 +2,7 @@ import random
 from PyQt4 import QtGui, QtCore
 from coordinate import Coordinate
 from sprite import Sprite
+from ball import Ball
 
 # eventfilter stuff ++
 from PyQt4.QtCore import QEvent, pyqtSignal, QRect, Qt, QRectF, QPoint
@@ -15,6 +16,7 @@ class Platform(QtGui.QWidget):
         super(Platform, self).__init__()
         self.initUI()
         self._sprite = Sprite(Coordinate(250,250), 'spiritus sanctii')
+        self._ball   = Ball(Coordinate(300, 550))
         self._keymap = {Qt.Key_Q:      self.noop,
                         Qt.Key_Escape: self.noop,
                         Qt.Key_W:      self._sprite.jump,
@@ -36,7 +38,15 @@ class Platform(QtGui.QWidget):
 
     def tick(self):
         self._sprite.tick(1/10.0)
+        self._ball.tick(1/10.0)
+        self.collision_detect()
         self.update()
+
+    def collision_detect(self):
+        p = self._sprite.pos
+        b = self._ball.pos
+        if p.distance(b) < 100:
+            print('Collision')
 
     def initUI(self):
         self.setGeometry(0, 0, 800, 600)
@@ -50,6 +60,7 @@ class Platform(QtGui.QWidget):
         qp = QtGui.QPainter()
         qp.begin(self)
         self.drawSprite(qp)
+        self.drawBall(qp)
         qp.end()
         
     def drawSprite(self, qp):
@@ -67,6 +78,14 @@ class Platform(QtGui.QWidget):
 
         qp.drawPixmap(pnt, qi);
 
+    def drawBall(self, qp):
+        if not self._ball.is_alive():
+            return False
+        pos = self._ball.pos
+        qp.setBrush(Qt.red)
+        nx = pos.x - 5
+        ny = 580-pos.y
+        qp.drawEllipse(nx, ny, 10, 10)
 
     def eventFilter(self, obj, event):
         """We catch and absorb all key presses"""
