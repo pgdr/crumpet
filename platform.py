@@ -82,7 +82,7 @@ class Platform(QtGui.QWidget):
         if not self._ball.is_alive():
             return False
         pos = self._ball.pos
-        qp.setBrush(Qt.red)
+        qp.setBrush(Qt.black)
         nx = pos.x - 5
         ny = 580-pos.y
         qp.drawEllipse(nx, ny, 10, 10)

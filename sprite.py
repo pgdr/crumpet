@@ -6,7 +6,9 @@ class Sprite(object):
         self._pos  = pos
         self._velocity = Coordinate.origo()
         self._acc = Coordinate(0,-9.81*50) # gravity * scale
-        self._drawable = ['E','N']
+        self._draw_right = ['rwalk1','rwalk2','rwalk3','rwalk4','rwalk5']
+        self._draw_left  = ['lwalk1','lwalk2','lwalk3','lwalk4','lwalk5'].reverse()
+        self._walkidx = 0
 
 
     def tick(self, s):
@@ -16,8 +18,8 @@ class Sprite(object):
         self._pos += s * upd;
         self._velocity += s * self._acc;
         vx,vy = self._velocity.x, self._velocity.y
-        if self._pos.y < 70:
-            self._pos.y = 70
+        if self._pos.y < 80:
+            self._pos.y = 80
             vy = 0
         if self._pos.x < 5:
             self._pos.x = 5.0
@@ -43,15 +45,11 @@ class Sprite(object):
         self._velocity += Coordinate(-10,0)
 
     def drawable(self):
-        if self._velocity.x > 0:
-            self._drawable[0] = 'E'
+        self._walkidx = 1 + ((self._pos.x) % 16)//4
+        wdir = 'r'
         if self._velocity.x < 0:
-            self._drawable[0] = 'W'
-        if self._velocity.y > 0:
-            self._drawable[1] = 'N'
-        if self._velocity.y < 0:
-            self._drawable[1] = 'S'
-        return 'graphics/' + ''.join(self._drawable) + '.png'
+            wdir = 'l'
+        return 'graphics/%swalk%d.png' % (wdir,self._walkidx)
 
     @property
     def pos(self):
